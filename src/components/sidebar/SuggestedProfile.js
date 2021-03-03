@@ -2,14 +2,20 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import image from "../../images/avatars/orwell.jpg";
+import {
+    updateLoggedInUserFollowing,
+    updateFollowedUserFollowers,
+} from "../../services/firebase";
 
-const SuggestedProfile = ({ profile, userId }) => {
+const SuggestedProfile = ({ profile, user }) => {
     const [followed, setFollowed] = useState(false);
 
     async function handleFollowUser() {
         setFollowed(true);
+        await updateLoggedInUserFollowing(user.docId, profile.userId, false);
+        await updateFollowedUserFollowers(profile.docId, user.userId, false);
     }
-
+    // console.log(profile);
     return !followed ? (
         <div className="flex flex-row items-center align-items justify-between">
             <div className="flex items-center justify-between">
@@ -25,7 +31,7 @@ const SuggestedProfile = ({ profile, userId }) => {
 
             <button
                 type="button"
-                onClick={() => console.log("followed")}
+                onClick={handleFollowUser}
                 className="text-xs font-bold text-blue-medium"
             >
                 Follow
@@ -35,7 +41,7 @@ const SuggestedProfile = ({ profile, userId }) => {
 };
 
 SuggestedProfile.propTypes = {
-    userId: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
 };
 

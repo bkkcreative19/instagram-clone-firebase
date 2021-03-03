@@ -14,7 +14,6 @@ export async function getUserByUserId(userId) {
     const result = await firebase
         .firestore()
         .collection("users")
-        .limit(10)
         .where("userId", "==", userId)
         .get();
     const user = result.docs.map((item) => ({
@@ -42,4 +41,35 @@ export async function getSuggestedProfiles(userId, following) {
         );
 
     return suggestedProfiles;
+}
+
+export async function updateLoggedInUserFollowing(
+    userDocId,
+    profileUserId,
+    isFollowingProfile
+) {
+    return firebase
+        .firestore()
+        .collection("users")
+        .doc(userDocId)
+        .update({
+            following: isFollowingProfile
+                ? FieldValue.arrayRemove(profileUserId)
+                : FieldValue.arrayUnion(profileUserId),
+        });
+}
+export async function updateFollowedUserFollowers(
+    profileDocId,
+    userUserId,
+    isFollowingProfile
+) {
+    return firebase
+        .firestore()
+        .collection("users")
+        .doc(profileDocId)
+        .update({
+            followers: isFollowingProfile
+                ? FieldValue.arrayRemove(userUserId)
+                : FieldValue.arrayUnion(userUserId),
+        });
 }

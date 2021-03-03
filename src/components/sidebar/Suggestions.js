@@ -4,21 +4,21 @@ import { getSuggestedProfiles } from "../../services/firebase";
 import Skeleton from "react-loading-skeleton";
 import SuggestedProfile from "./SuggestedProfile";
 
-const Suggestions = ({ userId, following }) => {
+const Suggestions = ({ user, following }) => {
     const [profiles, setProfiles] = useState(null);
     // console.log(profiles);
     useEffect(() => {
         const getProfiles = async () => {
             const suggestedProfiles = await getSuggestedProfiles(
-                userId,
+                user.userId,
                 following
             );
             setProfiles(suggestedProfiles);
         };
-        if (userId) {
+        if (user.userId) {
             getProfiles();
         }
-    }, [userId]);
+    }, [user.userId]);
     const renderProfiles =
         profiles === null
             ? ""
@@ -27,7 +27,7 @@ const Suggestions = ({ userId, following }) => {
                       <SuggestedProfile
                           key={profile.docId}
                           profile={profile}
-                          userId={userId}
+                          user={user}
                       />
                   );
               });
@@ -51,7 +51,7 @@ const Suggestions = ({ userId, following }) => {
 };
 
 Suggestions.propTypes = {
-    userId: PropTypes.string,
+    user: PropTypes.object,
     following: PropTypes.array,
 };
 
