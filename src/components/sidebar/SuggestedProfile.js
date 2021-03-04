@@ -21,7 +21,7 @@ const SuggestedProfile = ({ profile, user }) => {
             <div className="flex items-center justify-between">
                 <img
                     className="rounded-full w-8 flex mr-3"
-                    src={image}
+                    src={profile.img}
                     alt=""
                 />
                 <Link to={`/p/${profile.username}`}>
