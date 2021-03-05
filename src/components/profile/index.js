@@ -11,7 +11,7 @@ const UserProfile = ({ user }) => {
         photosCollection: [],
         followerCount: 0,
     };
-    console.log(user);
+
     const [{ profile, photosCollection, followerCount }, dispatch] = useReducer(
         reducer,
         initialState
@@ -20,7 +20,7 @@ const UserProfile = ({ user }) => {
     useEffect(() => {
         async function getProfileInfoAndPhotos() {
             const photos = await getUserPhotosByUsername(user.username);
-            console.log(photos);
+
             dispatch({
                 profile: user,
                 photosCollection: photos,
